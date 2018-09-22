@@ -20,6 +20,14 @@ function crawl_page($url, $depth = 5)
             $host = "http://".parse_url($url,PHP_URL_HOST);
             $href = $host. '/' . ltrim($href, '/');
         }
+
+        if (preg_match('/\bfacebook\b/', $href) ||
+            preg_match('/\binstagram\b/', $href) ||
+            preg_match('/\bpinterest\b/', $href) ||
+            preg_match('/\bgoogle\b/', $href)){
+            continue;
+        }
+
         crawl_page($href, $depth - 1);
       }
 
@@ -29,6 +37,11 @@ function crawl_page($url, $depth = 5)
       $source = $dom->saveHTML();
 
 
+    if (preg_match('/\bgtm.js\b/',$source)){
+        echo "Found Google Tag manager<br />";
+    } else {
+        echo "Didn´t found Google tag manager<br />";
+    }
      if (preg_match('/\bconnect.facebook.net\b/',$source)){
          echo "Found Facebook Pixel<br />";
      } else {
@@ -45,5 +58,5 @@ function crawl_page($url, $depth = 5)
     //   echo "CONTENT:",PHP_EOL,$dom->saveHTML(),PHP_EOL,PHP_EOL,"  <br /><br />";
 }
 
-crawl_page("http://mooibenjij.nl/", 3);
+crawl_page("http://mooibenjij.nl/", 4);
 ?>
